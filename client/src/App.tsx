@@ -1,5 +1,5 @@
-import HomePage from "./components/HomePage";
-import LandingPage from "./components/LandingPage";
+import Home from "./pages/Home/Home"
+import LandingPage from "./pages/LandingPage/LandingPage";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <HomePage />
+    element: <Home />
   }
 ]);
 

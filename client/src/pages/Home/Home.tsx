@@ -1,7 +1,7 @@
-import { WavyBackground } from "./wavy-background";
+import { WavyBackground } from "../../components/wavy-background"
 
 
-function HomePage() {
+function Home() {
   return (
     <WavyBackground className="max-w-4xl mx-auto pb-40">
       
@@ -9,4 +9,4 @@ function HomePage() {
   )
 }
 
-export default HomePage
+export default Home

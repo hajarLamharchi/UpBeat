@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { WavyBackground } from "./wavy-background";
-import "../styles/LandingPage.css";
+import { WavyBackground } from "../../components/wavy-background";
+import "./LandingPage.css";
 
 const LandingPage = () => {
     return (
