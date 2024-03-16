@@ -22,6 +22,8 @@ def new_release():
     """ Gets new release
     """
     release = spotify_api.fetch_new_releases()
+    if release is None:
+        return jsonify({'msg': 'could not fetch new release'}), 404
     return jsonify(release)
 
 
@@ -30,6 +32,8 @@ def playlist_tracks(playlist_id):
     """ Gets new release
     """
     tracks = spotify_api.get_playlist_tracks(playlist_id)
+    if tracks is None:
+        return jsonify({'msg': 'could not fetch tracks'}), 404
     return jsonify(tracks)
 
 @spotify.route('/album/<album_id>/tracks', methods=['GET'])
@@ -37,11 +41,15 @@ def album_tracks(album_id):
     """ Gets new release
     """
     tracks = spotify_api.get_album_tracks(album_id)
+    if tracks is None:
+        return jsonify({'msg': 'could not fetch tracks'}), 404
     return jsonify(tracks)
 
 @spotify.route('/track/<track_id>', methods=['GET'])
-def track(track_id):
+def tracks(track_id):
     """ Gets new release
     """
     track = spotify_api.get_track(track_id)
+    if track is None:
+        return jsonify({'msg': 'could not fetch track'}), 404
     return jsonify(track)

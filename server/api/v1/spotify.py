@@ -34,7 +34,7 @@ class SpotifyAPI:
             return playlist
         except Exception as e:
             print("Error fetching featured playlist:", e)
-            return {"error": "Error fetching playlist"}
+            return None
         
     def fetch_new_releases(self):
         """ Method to fetch new release
@@ -48,7 +48,7 @@ class SpotifyAPI:
             return release
         except Exception as e:
             print("Error fetching featured new release:", e)
-            return {"error": "Error fetching new release"}
+            None
         
     def get_playlist_tracks(self, playlist_uri):
         """ Comment
@@ -62,7 +62,7 @@ class SpotifyAPI:
             return tracks['items']
         except Exception as e:
             print("Error fetching tracks", e)
-            return {"error": "Error fetching tracks"}
+            return None
         
     def get_album_tracks(self, album_id):
         """ Gets album tracks
@@ -75,7 +75,7 @@ class SpotifyAPI:
             return tracks
         except Exception as e:
             print("Error fetching tracks", e)
-            return {"error": "Error fetching tracks"}
+            return None
         
     def get_track(self, track_id):
         """ Get  track
@@ -89,6 +89,6 @@ class SpotifyAPI:
             return track
         except Exception as e:
             print("Error fetching track", e)
-            return {"error": "Error fetching track"}
+            return None
         
         
