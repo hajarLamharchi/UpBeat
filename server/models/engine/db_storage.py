@@ -17,11 +17,12 @@ class DBStorage:
 
     def __init__(self):
         """Instantiate a DBStorage object"""
-        self.__engine = create_engine('postgresql://{}:{}@{}/upbeat'.
+        self.__engine = create_engine('postgresql://{}:{}@{}/{}'.
                                       format(
                                           os.environ['DB_USERNAME'],
                                           os.environ['DB_PASSWORD'],
-                                          os.environ['DB_HOST']
+                                          os.environ['DB_HOST'],
+                                          os.environ['DB_NAME']
                                       ))
    
     def all(self, cls=None):
