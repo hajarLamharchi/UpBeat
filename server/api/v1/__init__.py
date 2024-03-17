@@ -8,6 +8,7 @@ from models.user import User
 from flask_login import LoginManager
 import os
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 
 # Get env variables
 FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
@@ -15,6 +16,7 @@ FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
 # Flask app initialization
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
+cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 # Flask login configuration
 login_manager = LoginManager()
