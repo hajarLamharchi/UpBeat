@@ -5,9 +5,10 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 import models
 from models.baseModel import BaseModel, Base
 from models.user import User
+from models.playlist import Playlist
 import os
 
-classes = {"User": User }
+classes = {"User": User, "Playlist": Playlist}
 
 class DBStorage:
     """DB class definition"""

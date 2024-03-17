@@ -3,6 +3,7 @@
 from models.baseModel import BaseModel, Base
 from sqlalchemy import Column, String
 from flask_login import UserMixin
+from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base, UserMixin):
@@ -15,3 +16,4 @@ class User(BaseModel, Base, UserMixin):
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
     username = Column(String(128), nullable=False)
+    playlists = relationship('Playlist', back_populates='user', cascade='all, delete-orphan')

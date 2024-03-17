@@ -5,9 +5,7 @@ from models.user import User
 from models import storage
 from flask_login import login_user, current_user, login_required, logout_user
 import re
-from flask_bcrypt import Bcrypt
 
-# bcrypt = Bcrypt()
 user = Blueprint('user', __name__)
 
 
@@ -68,7 +66,6 @@ def register():
     
     # Create new User
     new_user = User(**new_user_data)
-    print(new_user)
     # Save User in database
     new_user.save()
     return jsonify({'message': 'user created successfully'})

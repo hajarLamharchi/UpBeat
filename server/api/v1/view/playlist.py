@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""User routes"""
+from flask import Blueprint, jsonify, request
+from models.playlist import Playlist
+from models import storage
+from flask_login import current_user, login_required
+
+playlist = Blueprint('playlist', __name__)
+
+@playlist.route('/playlists', methods=['GET'], endpoint='playlists')
+def all_playlists():
+    """ Get all playlist
+    """
+    db_playlist = storage.all(Playlist).values()
+    print(db_playlist)
+    playlist = []
+    # print(playlist)
+    for item in db_playlist:
+        playlist.append(item.to_dict())
+    return jsonify({'playlist': playlist}), 200
+
+@playlist.route('playlist/new_playlist', methods=['POST'])
+@login_required
+def new_playlist():
+    """ Add a nw playlist
+    """
+    if not current_user.is_authenticated:
+        return jsonify({'messasge': 'please login to conitnue'}), 301
+    new_playlist_data = {
+        'name': request.form.get('name'),
+        'user_id': current_user.id,
+        'description': request.form.get('description'),
+        'primary_color': request.form.get('primary_color'),
+    }
+    if not new_playlist_data['name'] or not new_playlist_data['user_id']:
+        return jsonify({'error': 'all fields are required'}), 400
+    
+    new_playlist = Playlist(**new_playlist_data)
+    # Save playlist in database
+    new_playlist.save()
+    return jsonify({'message': 'playlist created successfully'})
+
+@playlist.route('playlist/<playlist_id>', methods=['GET'])
+def single_playlist(playlist_id):
+    """ Get single playlist
+    """
+    playlist = storage.get(Playlist, playlist_id)
+    if playlist:
+        return jsonify(playlist.to_dict()), 200
+    else:
+        return jsonify({'message': 'playlist not found'}), 404
+    
+@playlist.route('playlist/<playlist_id>', methods=['DELETE'])
+def delete_playlist(playlist_id):
+    """ Delete single playlist
+    """
+    playlist = storage.get(Playlist, playlist_id)
+    if playlist:
+        storage.delete(playlist)
+        storage.save()
+        return jsonify({'message': 'playlist deleted successfully'}), 200
+    else:
+        return jsonify({'message': 'playlist does not exist'}), 404
