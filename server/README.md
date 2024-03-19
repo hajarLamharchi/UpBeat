@@ -11,6 +11,7 @@ pip install -r requirements.txt
 export DB_USERNAME
 export DB_PASSWORD
 export DB_HOST
+export DB_NAME
 export FLASK_SECRET_KEY
 export SPOTIFY_CLIENT_ID
 export SPOTIFY_CLIENT_SECRET

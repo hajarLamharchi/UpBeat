@@ -14,10 +14,6 @@ def validate_email(email):
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(pattern, email)
 
-@user.route('/', methods=['GET', 'POST'])
-def hello():
-    return jsonify({'message': 'From user route'})
-
 @user.route('/login', methods=['GET', 'POST'], endpoint='login')
 def login():
     """Login route"""
@@ -76,3 +72,18 @@ def logout():
     """Log out a user"""
     logout_user()
     return jsonify({'message': 'user logged out successfully'})
+
+@user.route('/<user_id>', methods=['GET'])
+def single_user(user_id):
+    """ Get single user
+    """
+    user = storage.get(User, user_id)
+    if user:
+        playlists = []
+        for item in user.playlists:
+            playlists.append(item.to_dict())
+        user = user.to_dict()
+        user['playlists'] = playlists
+        return jsonify(user), 200
+    else:
+        return jsonify({'message': 'playlist not found'}), 404

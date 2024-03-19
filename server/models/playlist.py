@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This module defines a playlist model"""
 from models.baseModel import BaseModel, Base
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -16,4 +16,4 @@ class Playlist(BaseModel, Base):
     href = Column(String(128), nullable=True)
     primary_color = Column(String(128), nullable=True, default='#ffffff')
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    user = relationship("User", back_populates="playlists")
+    tracks = relationship('PlaylistTrack', cascade='all, delete-orphan', lazy=True)
