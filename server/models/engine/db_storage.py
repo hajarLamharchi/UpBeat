@@ -6,9 +6,14 @@ import models
 from models.baseModel import BaseModel, Base
 from models.user import User
 from models.playlist import Playlist
+from models.playlist_track import PlaylistTrack
 import os
 
-classes = {"User": User, "Playlist": Playlist}
+classes = {
+    "User": User,
+    "Playlist": Playlist,
+    "PlaylistTrack": PlaylistTrack
+    }
 
 class DBStorage:
     """DB class definition"""

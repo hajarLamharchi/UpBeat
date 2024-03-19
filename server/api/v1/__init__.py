@@ -4,6 +4,7 @@ from flask import Flask, jsonify
 from .view.user import user
 from .view.spotifyAPI import spotify
 from .view.playlist import playlist
+from .view.playlist_track import playlist_track
 from models.user import User
 from flask_login import LoginManager
 import os
@@ -16,7 +17,7 @@ FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
 # Flask app initialization
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
-cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
+cors = CORS(app)
 
 # Flask login configuration
 login_manager = LoginManager()
@@ -45,3 +46,4 @@ def loader_user(user_id):
 app.register_blueprint(user, url_prefix='/api/v1/user')
 app.register_blueprint(spotify, url_prefix='/api/v1/')
 app.register_blueprint(playlist, url_prefix='/api/v1/user')
+app.register_blueprint(playlist_track, url_prefix='/api/v1/user')

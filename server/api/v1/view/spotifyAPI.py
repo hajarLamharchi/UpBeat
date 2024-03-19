@@ -38,7 +38,7 @@ def playlist_tracks(playlist_id):
 
 @spotify.route('/album/<album_id>/tracks', methods=['GET'])
 def album_tracks(album_id):
-    """ Gets new release
+    """ Gets album tracks
     """
     tracks = spotify_api.get_album_tracks(album_id)
     if tracks is None:

@@ -16,4 +16,4 @@ class User(BaseModel, Base, UserMixin):
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
     username = Column(String(128), nullable=False)
-    playlists = relationship('Playlist', back_populates='user', cascade='all, delete-orphan')
+    playlists = relationship('Playlist', cascade='all, delete-orphan', lazy=True)

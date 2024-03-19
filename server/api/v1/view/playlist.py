@@ -62,8 +62,8 @@ def single_playlist(playlist_id):
     """ Get single playlist
     """
     playlist = storage.get(Playlist, playlist_id)
+    print(playlist)
     if playlist:
-        print(playlist)
         return jsonify(playlist.to_dict()), 200
     else:
         return jsonify({'message': 'playlist not found'}), 404
