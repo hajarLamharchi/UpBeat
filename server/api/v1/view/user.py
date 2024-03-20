@@ -14,7 +14,7 @@ def validate_email(email):
     pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(pattern, email)
 
-@user.route('/login', methods=['GET', 'POST'], endpoint='login')
+@user.route('/login', methods=['GET', 'POST'], endpoint='login', strict_slashes=False)
 def login():
     """Login route"""
     from api.v1 import bcrypt
@@ -31,7 +31,7 @@ def login():
     return jsonify({'error': 'invalid email or password'}), 400
 
 
-@user.route('/register', methods=['GET', 'POST'], endpoint='register')
+@user.route('/register', methods=['GET', 'POST'], endpoint='register', strict_slashes=False)
 def register():
     """Register route"""
     from api.v1 import bcrypt
@@ -65,14 +65,14 @@ def register():
     new_user.save()
     return jsonify({'message': 'user created successfully'})
 
-@user.route("/logout")
+@user.route("/logout", strict_slashes=False)
 @login_required
 def logout():
     """Log out a user"""
     logout_user()
     return jsonify({'message': 'user logged out successfully'})
 
-@user.route('/<user_id>', methods=['GET'])
+@user.route('/<user_id>', methods=['GET'], strict_slashes=False)
 def single_user(user_id):
     """ Get single user
     """

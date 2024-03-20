@@ -10,4 +10,4 @@ class Favorite(BaseModel, Base):
     __tablename__ = "favorite"
 
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    songId = Column(String(60), nullable=False)
+    song_id = Column(String(60), nullable=False)

@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 
 playlist = Blueprint('playlist', __name__)
 
-@playlist.route('/playlists', methods=['GET'], endpoint='playlists')
+@playlist.route('/playlists', methods=['GET'], endpoint='playlists', strict_slashes=False)
 @login_required
 def all_playlists():
     """ Get all playlist
@@ -20,7 +20,7 @@ def all_playlists():
         playlist.append(item.to_dict())
     return jsonify({'playlist': playlist}), 200
 
-@playlist.route('/playlists/<user_id>', methods=['GET'])
+@playlist.route('/playlists/<user_id>', methods=['GET'], strict_slashes=False)
 @login_required
 def all_user_playlist(user_id):
     """ Get a user playlist
@@ -36,7 +36,7 @@ def all_user_playlist(user_id):
             playlist.append(item.to_dict())
     return jsonify({'playlist': playlist}), 200
 
-@playlist.route('playlist/new_playlist', methods=['POST'])
+@playlist.route('playlist/new_playlist', methods=['POST'], strict_slashes=False)
 @login_required
 def new_playlist():
     """ Add a nw playlist
@@ -57,7 +57,7 @@ def new_playlist():
     new_playlist.save()
     return jsonify({'message': 'playlist created successfully'})
 
-@playlist.route('playlist/<playlist_id>', methods=['GET'])
+@playlist.route('playlist/<playlist_id>', methods=['GET'], strict_slashes=False)
 def single_playlist(playlist_id):
     """ Get single playlist
     """
@@ -68,7 +68,7 @@ def single_playlist(playlist_id):
     else:
         return jsonify({'message': 'playlist not found'}), 404
     
-@playlist.route('playlist/update_playlist/<playlist_id>', methods=['POST'])
+@playlist.route('playlist/update_playlist/<playlist_id>', methods=['POST'], strict_slashes=False)
 @login_required
 def update_playlist(playlist_id):
     """ Add a nw playlist
@@ -87,7 +87,7 @@ def update_playlist(playlist_id):
     return jsonify({'message': 'playlist updated successfully'})
 
     
-@playlist.route('playlist/<playlist_id>', methods=['DELETE'])
+@playlist.route('playlist/<playlist_id>', methods=['DELETE'], strict_slashes=False)
 def delete_playlist(playlist_id):
     """ Delete single playlist
     """
