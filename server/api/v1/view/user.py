@@ -18,7 +18,6 @@ def validate_email(email):
 def login():
     """Login route"""
     from api.v1 import bcrypt
-
     if current_user.is_authenticated:
         return jsonify({'messasge': 'already logged in'})
     email  = request.form.get('email')
@@ -27,8 +26,8 @@ def login():
         return jsonify({'error': 'email and password is required'})
     user = storage.get_email(User, email.lower())
     if user and bcrypt.check_password_hash(user.password, password):
-        login_user(user)
-        return jsonify({'message': 'user logged in successfully'})
+        login_user(user, remember=True)
+        return jsonify({'message': 'user logged in successfully'}), 200
     return jsonify({'error': 'invalid email or password'}), 400
 
 

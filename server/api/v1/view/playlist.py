@@ -13,7 +13,7 @@ def all_playlists():
     """ Get all playlist
     """
     if not current_user.is_authenticated:
-        return jsonify({'messasge': 'please login to conitnue'}), 301
+        return jsonify({'messasge': 'please login to continue'}), 301
     db_playlist = storage.all(Playlist).values()
     playlist = []
     for item in db_playlist:
