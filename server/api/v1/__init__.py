@@ -5,6 +5,7 @@ from .view.user import user
 from .view.spotifyAPI import spotify
 from .view.playlist import playlist
 from .view.playlist_track import playlist_track
+from .view.favorite import favorite
 from models.user import User
 from flask_login import LoginManager
 import os
@@ -47,3 +48,4 @@ app.register_blueprint(user, url_prefix='/api/v1/user')
 app.register_blueprint(spotify, url_prefix='/api/v1/')
 app.register_blueprint(playlist, url_prefix='/api/v1/user')
 app.register_blueprint(playlist_track, url_prefix='/api/v1/user')
+app.register_blueprint(favorite, url_prefix='/api/v1/favorite')

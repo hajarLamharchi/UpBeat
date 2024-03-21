@@ -7,12 +7,14 @@ from models.baseModel import BaseModel, Base
 from models.user import User
 from models.playlist import Playlist
 from models.playlist_track import PlaylistTrack
+from models.favorite import Favorite
 import os
 
 classes = {
     "User": User,
     "Playlist": Playlist,
-    "PlaylistTrack": PlaylistTrack
+    "PlaylistTrack": PlaylistTrack,
+    'Favorite': Favorite
     }
 
 class DBStorage:
