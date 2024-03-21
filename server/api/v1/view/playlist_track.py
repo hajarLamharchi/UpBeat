@@ -14,7 +14,7 @@ client_id = os.environ['SPOTIFY_CLIENT_ID']
 client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
 spotify_api = SpotifyAPI(client_id=client_id, client_secret=client_secret)
 
-@playlist_track.route('playlists/new_track', methods=['GET'])
+@playlist_track.route('playlists/new_track', methods=['GET'], strict_slashes=False)
 @login_required
 def new_track():
     """ Add a nw playlist
@@ -44,3 +44,5 @@ def new_track():
         # Save track in database
         new_track.save()
         return jsonify({'message': 'playlist created successfully'})
+    
+
