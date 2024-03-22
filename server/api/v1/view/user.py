@@ -22,12 +22,11 @@ def prevent_access_if_logged_in(route):
             return route(*args, **kwargs)
     return decorated_route
 
-@user.route('/login', methods=['GET', 'POST'], endpoint='login')
+@user.route('/login', methods=['GET', 'POST'], endpoint='login', strict_slashes=False)
 @prevent_access_if_logged_in
 def login():
     """Login route"""
     from api.v1 import bcrypt
-
     if current_user.is_authenticated:
         return jsonify({'messasge': 'already logged in'})
     email  = request.form.get('email')
@@ -36,12 +35,12 @@ def login():
         return jsonify({'error': 'email and password is required'})
     user = storage.get_email(User, email.lower())
     if user and bcrypt.check_password_hash(user.password, password):
-        login_user(user)
-        return jsonify({'message': 'user logged in successfully'})
+        login_user(user, remember=True)
+        return jsonify({'message': 'user logged in successfully'}), 200
     return jsonify({'error': 'invalid email or password'}), 400
 
 
-@user.route('/register', methods=['GET', 'POST'], endpoint='register')
+@user.route('/register', methods=['GET', 'POST'], endpoint='register', strict_slashes=False)
 @prevent_access_if_logged_in
 def register():
     """Register route"""
@@ -77,14 +76,14 @@ def register():
     new_user.save()
     return jsonify({'message': 'user created successfully'})
 
-@user.route("/logout")
+@user.route("/logout", strict_slashes=False)
 @login_required
 def logout():
     """Log out a user"""
     logout_user()
     return jsonify({'message': 'user logged out successfully'})
 
-@user.route('/<user_id>', methods=['GET'])
+@user.route('/<user_id>', methods=['GET'], strict_slashes=False)
 @login_required
 def single_user(user_id):
     """ Get single user
@@ -98,7 +97,6 @@ def single_user(user_id):
         user['playlists'] = playlists
         return jsonify(user), 200
     else:
-        return jsonify({'message': 'playlist not found'}), 404
     
 @user.route('/forgot_password', methods=['POST'])
 @prevent_access_if_logged_in
