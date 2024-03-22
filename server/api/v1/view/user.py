@@ -96,7 +96,7 @@ def single_user(user_id):
         user = user.to_dict()
         user['playlists'] = playlists
         return jsonify(user), 200
-    else:
+    return jsonify({'message': 'user not found'}), 404
     
 @user.route('/forgot_password', methods=['POST'])
 @prevent_access_if_logged_in
