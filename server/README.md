@@ -22,6 +22,7 @@ export MAIL_PORT
 export MAIL_USERNAME
 export MAIL_PASSWORD
 export MAIL_SALT
+export SERVER_HOST
 
 
 # Create a virtualenv to containerize the app
