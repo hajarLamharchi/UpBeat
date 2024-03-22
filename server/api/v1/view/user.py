@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """User routes"""
 from flask import Blueprint, jsonify, request
+from functools import wraps
 from models.user import User
 from models import storage
 from flask_login import login_user, current_user, login_required, logout_user
-import re
+
 
 user = Blueprint('user', __name__)
 
-
-def validate_email(email):
-    # Basic email regex pattern
-    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-    return re.match(pattern, email)
+def prevent_access_if_logged_in(route):
+    """ A custom wrap that a direct an already loggedin user
+    """
+    @wraps(route)
+    def decorated_route(*args, **kwargs):
+        if current_user.is_authenticated:
+            # return an error response if there is a current user
+            return jsonify({'error': 'a user is already looged in'}), 400
+        else:
+            # Allow access to the route
+            return route(*args, **kwargs)
+    return decorated_route
 
 @user.route('/login', methods=['GET', 'POST'], endpoint='login', strict_slashes=False)
+@prevent_access_if_logged_in
 def login():
     """Login route"""
     from api.v1 import bcrypt
@@ -32,16 +41,18 @@ def login():
 
 
 @user.route('/register', methods=['GET', 'POST'], endpoint='register', strict_slashes=False)
+@prevent_access_if_logged_in
 def register():
     """Register route"""
     from api.v1 import bcrypt
+    from api.v1.controllers.user import validate_email
 
     if current_user.is_authenticated:
         return jsonify({'messasge': 'already logged in'})
     
     new_user_data = {
         'username': request.form.get('username'),
-        'email': request.form.get('email'),
+        'email': request.form.get('email').lower(),
         'password': bcrypt.generate_password_hash(request.form.get('password')).decode('utf-8'),
         'first_name': request.form.get('firstname'),
         'last_name': request.form.get('lastname')
@@ -54,7 +65,7 @@ def register():
     if not validate_email(new_user_data['email']):
         return jsonify({'error': 'invalid email address'}), 400
     
-    #check if user already exist
+    # Check if user already exist
     existing_email = storage.get_email(User, new_user_data['email'])
     if existing_email:
         return jsonify({'error': 'user already exist'}), 400
@@ -73,6 +84,7 @@ def logout():
     return jsonify({'message': 'user logged out successfully'})
 
 @user.route('/<user_id>', methods=['GET'], strict_slashes=False)
+@login_required
 def single_user(user_id):
     """ Get single user
     """
@@ -85,4 +97,39 @@ def single_user(user_id):
         user['playlists'] = playlists
         return jsonify(user), 200
     else:
-        return jsonify({'message': 'playlist not found'}), 404
+    
+@user.route('/forgot_password', methods=['POST'])
+@prevent_access_if_logged_in
+def forgot_password():
+    """ Forget password route
+    """
+    from api.v1.controllers.user import generate_reset_token, send_reset_email
+
+    email  = request.form.get('email')
+    if not email:
+        return jsonify({'error': 'email is required'})
+    user = storage.get_email(User, email.lower())
+    if not user:
+        return jsonify({'error': 'email not associated with a user'})
+    token = generate_reset_token(email)
+    send_reset_email(email, token)
+    return jsonify({'message': 'Reset password email sent!'})
+
+@user.route('/reset-password/<token>', methods=['POST'])
+@prevent_access_if_logged_in
+def reset_password(token):
+    """ Reset password
+    """
+    from api.v1 import bcrypt
+    from api.v1.controllers.user import verify_reset_token
+
+    email = verify_reset_token(token)
+    if email:
+        new_pwd = request.form.get('new_password')
+        user = storage.get_email(User, email.lower())
+        if user:
+            user.password = bcrypt.generate_password_hash(new_pwd).decode('utf-8')
+            user.save()
+            return jsonify({'message': 'Password reset successful!'})
+        return jsonify({'error': 'error finding email'}), 400
+    return jsonify({'error': 'Invalid or expired token'}), 400

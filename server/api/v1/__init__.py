@@ -11,6 +11,8 @@ from flask_login import LoginManager
 import os
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from flask_mail import Mail
+from itsdangerous import URLSafeTimedSerializer
 
 # Get env variables
 FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
@@ -19,6 +21,17 @@ FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
 cors = CORS(app)
+
+# Flas mail comfig
+app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
+app.config['MAIL_PORT'] = os.environ['MAIL_PORT']
+app.config['MAIL_USERNAME'] = os.environ['MAIL_USERNAME']
+app.config['MAIL_PASSWORD'] = os.environ['MAIL_PASSWORD']
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_DEFAULT_SENDER'] = 'noreply'
+mail = Mail(app)
+serializer = URLSafeTimedSerializer(app.secret_key)
 
 # Flask login configuration
 login_manager = LoginManager()

@@ -93,6 +93,8 @@ def delete_playlist(playlist_id):
     """
     playlist = storage.get(Playlist, playlist_id)
     if playlist:
+        if playlist.user_id != current_user.id:
+            return jsonify({'msg': 'you cannot delete this playlist'}), 301
         storage.delete(playlist)
         storage.save()
         return jsonify({'message': 'playlist deleted successfully'}), 200
