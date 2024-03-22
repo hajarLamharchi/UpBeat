@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify, request
-from ..spotify import SpotifyAPI
+#!/usr/bin/env python3
+"""Spotify controller"""
+from flask import Blueprint, jsonify
+from ..controllers.spotify import SpotifyAPI
 import os
 
 
