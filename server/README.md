@@ -1,8 +1,10 @@
-# Instal posgres to your local machine
+# UPBEAT SERVER
 
-# Setup posgres, add username and password
+Install posgres to your local machine
 
-# Create a database called upbeat
+Setup posgres, add username and password
+
+# Create a database
 
 # Install packages by running the command
 pip install -r requirements.txt
@@ -15,6 +17,13 @@ export DB_NAME
 export FLASK_SECRET_KEY
 export SPOTIFY_CLIENT_ID
 export SPOTIFY_CLIENT_SECRET
+export MAIL_SERVER
+export MAIL_PORT
+export MAIL_USERNAME
+export MAIL_PASSWORD
+export MAIL_SALT
+export SERVER_HOST
+
 
 # Create a virtualenv to containerize the app
 virtualenv <venv>
