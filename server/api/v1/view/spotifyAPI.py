@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Spotify controller"""
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from ..controllers.spotify import SpotifyAPI
 import os
 
@@ -72,3 +72,14 @@ def top_artists():
     if popular_artist is None:
         return jsonify({'msg': 'could not fetch track'}), 404
     return jsonify(popular_artist)
+
+@spotify.route('/search', methods=['GET'])
+def search():
+    """ Search
+    """
+    query = request.args.get('query')
+    if query:
+        results = spotify_api.perform_search(query)
+        return jsonify({'results': results})
+    else:
+        return jsonify({'error': 'No search query provided'})
