@@ -91,4 +91,32 @@ class SpotifyAPI:
             print("Error fetching track", e)
             return None
         
+    def perform_search(self, query, limit=20):
+        """ Perform search on spotify
+        """
+        # Search for tracks
+        track_results = self.sp.search(q=query, type='track', limit=limit)
+        tracks = [{'type': 'track', 'name': track['name'], 'artist': track['artists'][0]['name'], 'uri': track['uri']} for track in track_results['tracks']['items']]
+
+        # Search for playlists
+        playlist_results = self.sp.search(q=query, type='playlist', limit=limit)
+        playlists = [{'type': 'playlist', 'name': playlist['name'], 'uri': playlist['uri']} for playlist in playlist_results['playlists']['items']]
+
+        # Search for albums
+        album_results = self.sp.search(q=query, type='album', limit=limit)
+        albums = [{'type': 'album', 'name': album['name'], 'artist': album['artists'][0]['name'], 'uri': album['uri']} for album in album_results['albums']['items']]
+
+        # Search for artists
+        artist_results = self.sp.search(q=query, type='artist', limit=limit)
+        artists = [{'type': 'artist', 'name': artist['name'], 'uri': artist['uri']} for artist in artist_results['artists']['items']]
+
+        # Combine all search results
+        result_dict = {
+            'tracks': tracks,
+            'playlist': playlists,
+            'albums': albums,
+            'artists': artists
+        }
+
+        return result_dict
         
