@@ -123,7 +123,7 @@ class SpotifyAPI:
         except Exception as e:
             return None
         
-    def perform_search(self, query, limit=20):
+    def perform_search(self, query, limit=50):
         """ Perform search on spotify
         """
         # Search for tracks
