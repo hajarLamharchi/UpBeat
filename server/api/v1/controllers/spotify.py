@@ -90,6 +90,38 @@ class SpotifyAPI:
         except Exception as e:
             print("Error fetching track", e)
             return None
+
+    def get_popular_tracks(self):
+        """ get Top 50 tracks
+        """
+        if not self.initialization_successful:
+            return {"error": "Spotify client initialization failed"}
+        try:
+            playlist_tracks = self.sp.playlist_tracks("37i9dQZEVXbMDoHDwVN2tF")
+            tracks = []
+            for track in playlist_tracks['items']:
+                tracks.append(track['track'])
+            return tracks
+        except Exception as e:
+            return None
+
+    def get_popular_artist(self, limit):
+        """get popular artist
+        """
+        if not self.initialization_successful:
+            return {"error": "Spotify client initialization failed"}
+        try:
+            featured_playlists = self.sp.featured_playlists(limit=limit)
+            popular_artists = []
+            for playlist in featured_playlists['playlists']['items']:
+                playlist_tracks = self.sp.playlist_tracks(playlist['id'])
+                for track in playlist_tracks['items']:
+                    for artist in track['track']['artists']:
+                        popular_artists.append(artist)
+
+            return popular_artists
+        except Exception as e:
+            return None
         
     def perform_search(self, query, limit=20):
         """ Perform search on spotify
