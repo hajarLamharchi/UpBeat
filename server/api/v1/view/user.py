@@ -27,10 +27,15 @@ def prevent_access_if_logged_in(route):
 def login():
     """Login route"""
     from api.v1 import bcrypt
+
     if current_user.is_authenticated:
         return jsonify({'messasge': 'already logged in'})
-    email  = request.form.get('email')
-    password = request.form.get('password')
+    
+    if not request.is_json:
+        return jsonify({'error': 'invalid content type'})
+        
+    email  = request.json.get('email')
+    password = request.json.get('password')
     if not email or not password:
         return jsonify({'error': 'email and password is required'})
     user = storage.get_email(User, email.lower())
@@ -50,12 +55,15 @@ def register():
     if current_user.is_authenticated:
         return jsonify({'messasge': 'already logged in'})
     
+    if not request.is_json:
+        return jsonify({'error': 'invalid content type'})
+    
     new_user_data = {
-        'username': request.form.get('username'),
-        'email': request.form.get('email').lower(),
-        'password': bcrypt.generate_password_hash(request.form.get('password')).decode('utf-8'),
-        'first_name': request.form.get('firstname'),
-        'last_name': request.form.get('lastname')
+        'username': request.json.get('username'),
+        'email': request.json.get('email').lower(),
+        'password': bcrypt.generate_password_hash(request.json.get('password')).decode('utf-8'),
+        'first_name': request.json.get('firstname'),
+        'last_name': request.json.get('lastname')
     }
     # Validate form data
     if not new_user_data['username'] or not new_user_data['email'] or not new_user_data['password'] or not new_user_data['first_name'] or not new_user_data['last_name']:
@@ -105,7 +113,9 @@ def forgot_password():
     """
     from api.v1.controllers.user import generate_reset_token, send_reset_email
 
-    email  = request.form.get('email')
+    if not request.is_json:
+        return jsonify({'error': 'invalid content type'})
+    email  = request.json.get('email')
     if not email:
         return jsonify({'error': 'email is required'})
     user = storage.get_email(User, email.lower())
@@ -123,9 +133,12 @@ def reset_password(token):
     from api.v1 import bcrypt
     from api.v1.controllers.user import verify_reset_token
 
+    if not request.is_json:
+        return jsonify({'error': 'invalid content type'})
+    
     email = verify_reset_token(token)
     if email:
-        new_pwd = request.form.get('new_password')
+        new_pwd = request.json.get('new_password')
         user = storage.get_email(User, email.lower())
         if user:
             user.password = bcrypt.generate_password_hash(new_pwd).decode('utf-8')
