@@ -24,14 +24,13 @@ app.secret_key = FLASK_SECRET_KEY
 cors = CORS(app)
 
 # Flas mail comfig
-"""app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
+app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
 app.config['MAIL_PORT'] = os.environ['MAIL_PORT']
 app.config['MAIL_USERNAME'] = os.environ['MAIL_USERNAME']
 app.config['MAIL_PASSWORD'] = os.environ['MAIL_PASSWORD']
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEFAULT_SENDER'] = ('no-reply', os.environ['MAIL_USERNAME'])
-"""
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.secret_key)
