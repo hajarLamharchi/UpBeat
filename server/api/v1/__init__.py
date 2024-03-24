@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Main app file where Flask app is defined and configure"""
-from flask import Flask, jsonify
+from datetime import timedelta
+from flask import Flask, jsonify, session
 from .view.user import user
 from .view.spotifyAPI import spotify
 from .view.playlist import playlist
 from .view.playlist_track import playlist_track
 from .view.favorite import favorite
 from models.user import User
-from flask_login import LoginManager
+from flask_login import LoginManager, logout_user
 import os
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
@@ -30,6 +31,7 @@ app.config['MAIL_PASSWORD'] = os.environ['MAIL_PASSWORD']
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_DEFAULT_SENDER'] = ('no-reply', os.environ['MAIL_USERNAME'])
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.secret_key)
 
@@ -39,6 +41,12 @@ login_manager.init_app(app)
 
 # bcrypt initialization
 bcrypt = Bcrypt(app)
+
+@app.before_request
+def before_request():
+    session.modified = True
+    if 'permanent' not in session:
+        logout_user()
 
 # Custom 404 error handler - not found
 @app.errorhandler(404)
