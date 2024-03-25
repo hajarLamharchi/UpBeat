@@ -22,7 +22,7 @@ def prevent_access_if_logged_in(route):
             return route(*args, **kwargs)
     return decorated_route
 
-@user.route('/login', methods=['GET', 'POST'], endpoint='login', strict_slashes=False)
+@user.route('/login', methods=['POST'], endpoint='login', strict_slashes=False)
 @prevent_access_if_logged_in
 def login():
     """Login route"""
