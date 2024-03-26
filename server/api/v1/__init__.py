@@ -21,7 +21,7 @@ FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
 # Flask app initialization
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
-cors = CORS(app)
+cors = CORS(app, supports_credentials=True)
 
 # Flas mail comfig
 app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
@@ -47,6 +47,7 @@ def before_request():
     session.modified = True
     if 'permanent' not in session:
         logout_user()
+
 
 # Custom 404 error handler - not found
 @app.errorhandler(404)
