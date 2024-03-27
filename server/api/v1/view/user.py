@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """User routes"""
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from functools import wraps
 from models.user import User
 from models import storage
@@ -22,7 +22,7 @@ def prevent_access_if_logged_in(route):
             return route(*args, **kwargs)
     return decorated_route
 
-@user.route('/login', methods=['GET', 'POST'], endpoint='login', strict_slashes=False)
+@user.route('/login', methods=['POST'], endpoint='login', strict_slashes=False)
 @prevent_access_if_logged_in
 def login():
     """Login route"""
@@ -41,6 +41,7 @@ def login():
     user = storage.get_email(User, email.lower())
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user, remember=True)
+        session['permanent'] = True
         return jsonify({'message': 'user logged in successfully'}), 200
     return jsonify({'error': 'invalid email or password'}), 400
 
@@ -89,6 +90,7 @@ def register():
 def logout():
     """Log out a user"""
     logout_user()
+    session.pop('permanent', None)
     return jsonify({'message': 'user logged out successfully'})
 
 @user.route('/<user_id>', methods=['GET'], strict_slashes=False)
