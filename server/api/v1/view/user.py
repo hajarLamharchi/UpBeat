@@ -32,7 +32,7 @@ def login():
         return jsonify({'messasge': 'already logged in'})
     
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
         
     email  = request.json.get('email')
     password = request.json.get('password')
@@ -56,7 +56,7 @@ def register():
         return jsonify({'messasge': 'already logged in'})
     
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
     
     new_user_data = {
         'username': request.json.get('username'),
@@ -114,7 +114,7 @@ def forgot_password():
     from api.v1.controllers.user import generate_reset_token, send_reset_email
 
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
     email  = request.json.get('email')
     if not email:
         return jsonify({'error': 'email is required'})
@@ -134,7 +134,7 @@ def reset_password(token):
     from api.v1.controllers.user import verify_reset_token
 
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
     
     email = verify_reset_token(token)
     if email:
