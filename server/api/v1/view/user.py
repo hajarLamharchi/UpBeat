@@ -42,7 +42,13 @@ def login():
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user, remember=True)
         session['permanent'] = True
-        return jsonify({'message': 'user logged in successfully'}), 200
+        response_data = {'message': 'user logged in successfully'}
+        set_cookie_header = request.headers.get('Cookie')
+    
+        if set_cookie_header:
+            response_data['setCookieHeader'] = set_cookie_header
+        response = jsonify(response_data)
+        return response, 200
     return jsonify({'error': 'invalid email or password'}), 400
 
 
