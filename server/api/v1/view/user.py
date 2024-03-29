@@ -41,8 +41,7 @@ def login():
     user = storage.get_email(User, email.lower())
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user, remember=True)
-        session['permanent'] = True
-        return jsonify({'message': 'user logged in successfully'}), 200
+        return jsonify({'message': 'user logged in successfully', 'user': user.to_dict()}), 200
     return jsonify({'error': 'invalid email or password'}), 400
 
 
