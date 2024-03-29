@@ -32,7 +32,7 @@ def login():
         return jsonify({'messasge': 'already logged in'})
     
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
         
     email  = request.json.get('email')
     password = request.json.get('password')
@@ -41,14 +41,9 @@ def login():
     user = storage.get_email(User, email.lower())
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user, remember=True)
-        session['permanent'] = True
-        response_data = {'message': 'user logged in successfully'}
+        response_data = {'message': 'user logged in successfully', 'user': user.to_dict()}
         set_cookie_header = request.headers.get('Cookie')
-    
-        if set_cookie_header:
-            response_data['setCookieHeader'] = set_cookie_header
-        response = jsonify(response_data)
-        return response, 200
+        return response_data, 200
     return jsonify({'error': 'invalid email or password'}), 400
 
 
@@ -63,7 +58,7 @@ def register():
         return jsonify({'messasge': 'already logged in'})
     
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
     
     new_user_data = {
         'username': request.json.get('username'),
@@ -122,7 +117,7 @@ def forgot_password():
     from api.v1.controllers.user import generate_reset_token, send_reset_email
 
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
     email  = request.json.get('email')
     if not email:
         return jsonify({'error': 'email is required'})
@@ -142,7 +137,7 @@ def reset_password(token):
     from api.v1.controllers.user import verify_reset_token
 
     if not request.is_json:
-        return jsonify({'error': 'invalid content type'})
+        return jsonify({'error': 'invalid content type, please use json'})
     
     email = verify_reset_token(token)
     if email:
