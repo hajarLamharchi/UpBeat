@@ -8,13 +8,15 @@ from models.user import User
 from models.playlist import Playlist
 from models.playlist_track import PlaylistTrack
 from models.favorite import Favorite
+from models.exp_tokens import ExpToken
 import os
 
 classes = {
-    "User": User,
-    "Playlist": Playlist,
-    "PlaylistTrack": PlaylistTrack,
-    'Favorite': Favorite
+    'User': User,
+    'Playlist': Playlist,
+    'PlaylistTrack': PlaylistTrack,
+    'Favorite': Favorite,
+    'ExpToken': ExpToken
     }
 
 class DBStorage:
@@ -109,5 +111,18 @@ class DBStorage:
         all_cls = models.storage.all(cls)
         for value in all_cls.values():
             if (value.email == email):
+                return value
+        return None
+    
+    def get_jti(self, cls, jti):
+        """
+        Returns the object based on jti
+        None if not found
+        """
+        if cls not in classes.values():
+            return None
+        all_jti = models.storage.all(cls)
+        for value in all_jti.values():
+            if (value.jti == jti):
                 return value
         return None
