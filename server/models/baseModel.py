@@ -16,7 +16,7 @@ class BaseModel():
     """
     BaseModel class from which future classes will be derived"""
     #Base Model columns
-    id = Column(String(60), primary_key=True)
+    id = Column(String(120), primary_key=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
