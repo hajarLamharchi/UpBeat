@@ -66,6 +66,7 @@ UpBeat is a simple music streaming application built with Python and React, aime
 2. **Install Frontend Dependencies:** Navigate to the frontend directory and install the required npm packages:
     ```
     cd client
+    npm install
     npm run dev
     ```
 
