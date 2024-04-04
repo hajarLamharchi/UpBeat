@@ -65,8 +65,8 @@ UpBeat is a simple music streaming application built with Python and React, aime
 
 2. **Install Frontend Dependencies:** Navigate to the frontend directory and install the required npm packages:
     ```
-    cd upbeat-frontend
-    npm install
+    cd client
+    npm run dev
     ```
 
 ## Usage
@@ -78,4 +78,4 @@ UpBeat is a simple music streaming application built with Python and React, aime
     npm start
     ```
 
-3. **Access the Application:** Open your web browser and navigate to the URL where the frontend server is running (by default, http://localhost:3000/).
+3. **Access the Application:** Open your web browser and navigate to the URL where the frontend server is running (by default, http://localhost:5173/).
