@@ -8,12 +8,13 @@ from .view.playlist import playlist
 from .view.playlist_track import playlist_track
 from .view.favorite import favorite
 from models.user import User
-from flask_login import LoginManager, logout_user
 import os
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_mail import Mail
 from itsdangerous import URLSafeTimedSerializer
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 # Get env variables
 FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
@@ -21,9 +22,13 @@ FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
 # Flask app initialization
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
+app.config["JWT_SECRET_KEY"] = FLASK_SECRET_KEY
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=14)
+jwt = JWTManager(app)
 cors = CORS(app, supports_credentials=True, expose_headers=['Set-Cookie'], origins='*')
 
-# Flas mail comfig
+# Flask mail comfig
 app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
 app.config['MAIL_PORT'] = os.environ['MAIL_PORT']
 app.config['MAIL_USERNAME'] = os.environ['MAIL_USERNAME']
@@ -35,19 +40,9 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.secret_key)
 
-# Flask login configuration
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 # bcrypt initialization
 bcrypt = Bcrypt(app)
-
-@app.before_request
-def before_request():
-    session.modified = True
-    if 'permanent' not in session:
-        logout_user()
-
 
 
 # Custom 404 error handler - not found
@@ -60,11 +55,41 @@ def page_not_found(error):
 def page_unauthorized(error):
     return jsonify({'error': 'please log in to continue'}), 401
 
-# Creates a user loader for flask-login callback that returns the user object given an id
-@login_manager.user_loader
-def loader_user(user_id):
+
+# FLASK_JWT LOAD USER
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_headers, jwt_data):
     from models import storage
-    return storage.get(User, user_id)
+
+    user_id = jwt_data["sub"]
+    user = storage.get(User, user_id)
+    return user
+
+# FLASK_JWT ERROR HANDLING
+@jwt.expired_token_loader
+def expired_token(jwt_header, jwt_data):
+    return jsonify({"error": "expired token"}), 401
+
+@jwt.invalid_token_loader
+def invalid_token(error):
+    return jsonify({"error": "Verification failed, invalid token"}), 401
+    
+@jwt.unauthorized_loader
+def missing_token_callback(error):
+    return jsonify({"error": "Request does not contain any token"}), 401,
+
+# FLASK_JWT BLOCKLIST FOR LOGOUT
+@jwt.token_in_blocklist_loader
+def exp_token(jwt_header, jwt_data):
+    from models.exp_tokens import ExpToken
+    from models import storage
+
+    jti = jwt_data['jti']
+
+    token = storage.get_jti(ExpToken, jti)
+
+    return token is not None
+    
 
 
 app.register_blueprint(user, url_prefix='/api/v1/user')

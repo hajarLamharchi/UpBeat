@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from models.playlist_track import PlaylistTrack
 from models.playlist import Playlist
 from models import storage
-from flask_login import current_user, login_required
+from flask_jwt_extended import jwt_required, current_user
 from ..controllers.spotify import SpotifyAPI
 import os
 
@@ -15,19 +15,18 @@ client_secret = os.environ['SPOTIFY_CLIENT_SECRET']
 spotify_api = SpotifyAPI(client_id=client_id, client_secret=client_secret)
 
 @playlist_track.route('playlists/new_track', methods=['GET'], strict_slashes=False)
-@login_required
+@jwt_required()
 def new_track():
     """ Add a new playlist
     """
-    if not current_user.is_authenticated:
-        return jsonify({'messasge': 'please login to conitnue'}), 301
     spotify_id = request.args.get('spotify_id')
     playlist_id = request.args.get('playlist_id')
+    print(playlist_id)
     if spotify_id and playlist_id:
         playlist_exist = storage.get(Playlist, playlist_id)
         if playlist_exist is None:
             return jsonify({'msg': 'playlist not found'}), 404
-        track_id = f'{current_user.id[8]-{spotify_id}}'
+        track_id = f'{current_user.id[8]}-{spotify_id}'
         track_exist = storage.get(PlaylistTrack, track_id)
         if track_exist and track_exist.playlist_id == playlist_id:
             return jsonify({'msg': 'track already exist on playlist'}), 409
@@ -50,16 +49,14 @@ def new_track():
         new_track = PlaylistTrack(**new)
         # Save track in database
         new_track.save()
-        return jsonify({'message': 'playlist created successfully'})
-    return jsonify({'message': 'could not add track to playlist'})
+        return jsonify({'message': 'track added successfully'})
+    return jsonify({'error': 'could not add track to playlist'}), 400
     
-@playlist_track.route('playlists/new_track', methods=['DELETE'])
-@login_required
+@playlist_track.route('playlists/track', methods=['DELETE'])
+@jwt_required()
 def remove_track():
     """ remove a track from playlist
     """
-    if not current_user.is_authenticated:
-        return jsonify({'messasge': 'please login to conitnue'}), 301
     track_id = request.args.get('track_id')
     playlist_id = request.args.get('playlist_id')
     if track_id and playlist_id:
@@ -76,11 +73,9 @@ def remove_track():
         return jsonify({'message': 'playlist deleted successfully'}), 200
         
 @playlist_track.route('playlists/<playlist_id>/tracks', methods=['GET'])
-@login_required
+@jwt_required()
 def user_tracks(playlist_id):
     """ Get user playlist tracks"""
-    if not current_user.is_authenticated:
-        return jsonify({'messasge': 'please login to conitnue'}), 301
     if not playlist_id:
         return jsonify({'message': 'playlist not found'}), 404
     db_track = storage.all(PlaylistTrack).values()
