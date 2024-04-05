@@ -1,0 +1,37 @@
+.track-container h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.home-sections {
+  background-color: rgba(33, 51, 57, 0.5);
+  padding: 5px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navigate-container {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+}
+
+.navigate-button {
+  background-color: hsl(292, 91%, 73%);
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.navigate-button:hover {
+  transform: scale(1.1);
+}
+
+.container-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

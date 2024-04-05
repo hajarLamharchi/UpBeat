@@ -1,0 +1,21 @@
+.homepage-container {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.homepage-content {
+  padding: 20px;
+  /* background-color: rgba(33, 51, 57, 0.4); */
+  width: 90%;
+  margin-left: 5px;
+  height: 100vh;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.homepage-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

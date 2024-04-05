@@ -1,0 +1,68 @@
+{
+  "New Released": [
+    {
+      "id": 1,
+      "link": "/",
+      "image": "../../assets/The_Weeknd_-_Popular.png",
+      "alt": "song1",
+      "artist": "The Weeknd",
+      "title": "Popular",
+      "isLiked": false,
+      "src": "../../assets/The_Weeknd_-_Popular.mp3"
+    },
+    {
+      "id": 2,
+      "link": "/",
+      "image": "../../assets/264x264.jpg",
+      "alt": "song2",
+      "artist": "Ariana Grande",
+      "title": "Yes, And?",
+      "isLiked": false,
+      "src": "../../assets/Ariana_Grande_-_Yes_And.mp3"
+    }
+  ],
+  "Popular Artists": [
+    {
+      "id": 3,
+      "link": "/",
+      "image": "../../assets/ajeup0ayctw4ztltklrnuvtm-y4xulezgneawbqw4cs_custom-7aa29347d5da230c6101168c71549a7399302d0c-s1100-c50.jpg",
+      "alt": "song2",
+      "artist": "Adele",
+      "title": "When We Were Young",
+      "isLiked": false,
+      "src": "../../assets/Adele_-_When_We_Were_Young.mp3"
+    },
+    {
+      "id": 4,
+      "link": "/",
+      "image": "../../assets/ab6761610000e5eb989ed05e1f0570cc4726c2d3.jpg",
+      "alt": "song2",
+      "artist": "ColdPlay",
+      "title": "Yellow",
+      "isLiked": false,
+      "src": "../../assets/Coldplay_-_Yellow.mp3"
+    }
+  ],
+  "Popular Tracks": [
+    {
+      "id": 5,
+      "link": "/",
+      "image": "../../assets/The_Weeknd_-_Blinding_Lights.png",
+      "alt": "song2",
+      "artist": "The Weeknd",
+      "title": "Blinding lights",
+      "isLiked": false,
+      "src": "../../assets/The_Weeknd_-_Blinding_Lights.mp3"
+    },
+    {
+      "id": 6,
+      "link": "/",
+      "image": "../../assets/1aa429772140dc310608e2268b8133a6b5-tyla-.rsquare.w330.webp",
+      "alt": "song2",
+      "artist": "Tyla",
+      "title": "Water",
+      "isLiked": false,
+      "src": "../../assets/Tyla_-_Water.mp3"
+    }
+  ]
+}
