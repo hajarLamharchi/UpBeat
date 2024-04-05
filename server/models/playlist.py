@@ -14,6 +14,6 @@ class Playlist(BaseModel, Base):
     name = Column(String(128), nullable=False)
     description = Column(String(600), nullable=True)
     href = Column(String(128), nullable=True)
-    primary_color = Column(String(128), nullable=True, default='#ffffff')
+    primary_color = Column(String(128), nullable=False, default='#ffffff')
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     tracks = relationship('PlaylistTrack', cascade='all, delete-orphan', lazy=True)

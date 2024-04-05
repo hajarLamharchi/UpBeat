@@ -48,7 +48,7 @@ class DBStorage:
                 key = "{}.{}".format(type(elem).__name__, elem.id)
                 dict[key] = elem
         else:
-            model_list = [ User ]
+            model_list = [ User, Playlist, PlaylistTrack, Favorite, ExpToken ]
             for clase in model_list:
                 query = self.__session.query(clase)
                 for elem in query:
