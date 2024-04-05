@@ -22,12 +22,12 @@ def login():
     from api.v1 import bcrypt
 
     if not request.is_json:
-        return jsonify({'error': 'invalid content type, please use json'})
+        return jsonify({'error': 'invalid content type, please use json'}), 415
         
     email  = request.json.get('email', None)
     password = request.json.get('password', None)
     if email is None or password is None:
-        return jsonify({'error': 'email and password is required'})
+        return jsonify({'error': 'email and password is required'}), 400
     user = storage.get_email(User, email.lower())
     if user and bcrypt.check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.id)
